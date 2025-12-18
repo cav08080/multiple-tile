@@ -1,0 +1,262 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+}
+
+/* Header styles removed */
+
+.flashcard {
+    background: white;
+    padding: 20px;
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    box-shadow: none;
+    /* Removed shadow for cleaner look */
+}
+
+.question-view,
+.answer-view {
+    display: none;
+    width: 100%;
+}
+
+.question-view.active,
+.answer-view.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Grid Container */
+.grid-container {
+    position: relative;
+    display: inline-block;
+    padding: 20px;
+    background: transparent;
+}
+
+.grid {
+    display: grid;
+    gap: 0;
+    background: #e0e0e0;
+    /* Gray background for the 9x9 area */
+    padding: 0;
+    border: none;
+    /* Removed border, handled by outline layer */
+    width: 540px;
+    /* 9 cells × 60px */
+    height: 540px;
+    /* 9 cells × 60px */
+}
+
+/* Outlines Layer (Absolute positioned) */
+.grid-outline {
+    position: absolute;
+    top: 20px;
+    /* Match grid-container padding */
+    left: 20px;
+    /* Match grid-container padding */
+    width: 540px;
+    height: 540px;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    /* Border is inside the dimensions */
+    pointer-events: none;
+    /* Let clicks pass through */
+    z-index: 5;
+}
+
+.block-outline {
+    position: absolute;
+    /* top/left/width/height set by JS */
+    /* Add padding offset from grid-container if `top` in JS is 0-relative to outline */
+    /* Actually JS sets top based on row*60.
+       If grid-outline is at 20,20, block-outline should also be offset by 20,20
+       OR appended to the grid component?
+       JS appends to gridContainer.
+       So we need to account for the gridContainer padding in CSS or usage.
+       Let's use `transform: translate(20px, 20px)` or just rely on top/left calc.
+       The grid inside container starts at padding 20px.
+       Let's set top/left in CSS to Match padding.
+    */
+    top: 20px;
+    left: 20px;
+
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    /* Border is inside the dimensions */
+    pointer-events: none;
+    z-index: 6;
+    /* Above grid outline */
+}
+
+.cell {
+    background: transparent;
+    border: none;
+    /* No lines for background cells */
+    aspect-ratio: 1;
+    width: 60px;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+.cell.highlighted {
+    background: #ffffff;
+    /* White for the problem area */
+    border: none;
+    /* Borders handled by outline and inner-line */
+}
+
+/* Vertical lines separating columns inside the block */
+.cell.highlighted.inner-line {
+    border-right: 1px solid #000000;
+}
+
+.answer-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: transparent;
+    color: #000000;
+    font-size: 2.2rem;
+    /* Adjusted to fit nicely in 60x60 */
+    font-weight: normal;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    /* Let clicks pass through to cell/card */
+}
+
+/* Answer View */
+.equation {
+    font-size: 6rem;
+    font-weight: normal;
+    color: #000000;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Controls */
+.controls {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.btn {
+    font-size: 1.3rem;
+    padding: 12px 35px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: normal;
+    transition: all 0.2s ease;
+    box-shadow: none;
+    background: white;
+    color: #333;
+}
+
+.btn:hover {
+    background: #f0f0f0;
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background: white;
+    color: #333;
+}
+
+.btn-primary:hover {
+    background: #f0f0f0;
+}
+
+.btn-secondary {
+    background: white;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #f0f0f0;
+}
+
+.instructions {
+    text-align: center;
+    color: #666;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .flashcard {
+        padding: 40px 20px;
+        min-height: 500px;
+    }
+
+    .equation {
+        font-size: 4rem;
+    }
+
+    .answer-label {
+        font-size: 1.5rem;
+        padding: 3px 8px;
+    }
+
+    .cell {
+        width: 45px;
+        height: 45px;
+    }
+
+    .btn {
+        font-size: 1.1rem;
+        padding: 10px 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .equation {
+        font-size: 3rem;
+    }
+
+    .answer-label {
+        font-size: 1.2rem;
+        padding: 2px 6px;
+    }
+
+    .cell {
+        width: 35px;
+        height: 35px;
+    }
+}
