@@ -17,6 +17,10 @@ body {
 .container {
     max-width: 900px;
     width: 100%;
+    position: relative;
+    /* For absolute positioning of instructions */
+    min-height: 700px;
+    /* Ensure enough space for content and instructions */
 }
 
 /* Header styles removed */
@@ -28,7 +32,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
+    /* Space for fixed instructions */
     position: relative;
     box-shadow: none;
     /* Removed shadow for cleaner look */
@@ -208,10 +213,15 @@ body {
 }
 
 .instructions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     text-align: center;
     color: #666;
     font-size: 1rem;
     opacity: 0.8;
+    padding: 10px 0;
 }
 
 /* Responsive Design */
